@@ -35,4 +35,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Here are the ones used for location
+    // For developers using AndroidX in app
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    // For developers using Android Support Library
+    implementation 'pub.devrel:easypermissions:2.0.1'
 }
