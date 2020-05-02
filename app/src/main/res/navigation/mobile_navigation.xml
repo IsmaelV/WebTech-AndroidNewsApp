@@ -18,10 +18,10 @@
         tools:layout="@layout/fragment_headlines" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.hw_9_webtech.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_trending"
+        android:name="com.example.hw_9_webtech.ui.trending.TrendingFragment"
+        android:label="@string/title_trending"
+        tools:layout="@layout/fragment_trending" />
 
     <fragment
         android:id="@+id/navigation_bookmark"

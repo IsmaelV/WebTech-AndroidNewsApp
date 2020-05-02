@@ -1,16 +1,16 @@
-package com.example.hw_9_webtech.ui.notifications;
+package com.example.hw_9_webtech.ui.trending;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class TrendingViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public TrendingViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is notifications fragment");
+        mText.setValue("This is the trending fragment");
     }
 
     public LiveData<String> getText() {

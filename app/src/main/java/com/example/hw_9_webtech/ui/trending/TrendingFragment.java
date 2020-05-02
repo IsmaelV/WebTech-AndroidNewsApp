@@ -1,4 +1,4 @@
-package com.example.hw_9_webtech.ui.notifications;
+package com.example.hw_9_webtech.ui.trending;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.hw_9_webtech.R;
 
-public class NotificationsFragment extends Fragment {
+public class TrendingFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private TrendingViewModel trendingViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        trendingViewModel =
+                ViewModelProviders.of(this).get(TrendingViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_trending, container, false);
+        final TextView textView = root.findViewById(R.id.text_trending);
+        trendingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
