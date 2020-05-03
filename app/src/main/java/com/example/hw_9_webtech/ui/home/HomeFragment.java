@@ -61,7 +61,15 @@ public class HomeFragment extends Fragment {
         r.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+//                jsonParse();
                 shuffle();
+//                listView.setAdapter(
+//                        new ArrayAdapter<>(
+//                                Objects.requireNonNull(getActivity()),
+//                                android.R.layout.simple_list_item_1,
+//                                tmp_list
+//                        )
+//                );
                 r.setRefreshing(false);
             }
         });
@@ -82,6 +90,8 @@ public class HomeFragment extends Fragment {
 
     private void jsonParse() {
         String apiURL = "https://ivillega-nytimes-guardian.wl.r.appspot.com/guardian/home";
+        tmp_list.clear();
+        all_news.clear();
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 apiURL,
@@ -95,7 +105,7 @@ public class HomeFragment extends Fragment {
 
                             for(int i = 0; i < results.length(); i++){
                                 NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i), "home");
-                                tmp_list.add(singleArticle.getTitle());
+                                tmp_list.add(singleArticle.getTitle() + ", " + singleArticle.getSection() + ", " + singleArticle.getDate());
                                 all_news.add(singleArticle);
                             }
                         }

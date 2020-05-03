@@ -12,11 +12,6 @@
     <string name="sports">Sports</string>
     <string name="technology">Technology</string>
 
-    <string-array name="yoink">
-        <item>Data 1</item>
-        <item>Data 2</item>
-        <item>Data 3</item>
-        <item>Data 4</item>
-        <item>Data 5</item>
-    </string-array>
+    <string name="bookmarked">Bookmarked</string>
+    <string name="not_bookmarked">Not Bookmarked</string>
 </resources>
