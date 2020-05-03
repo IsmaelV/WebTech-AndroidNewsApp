@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class HomeFragment extends Fragment {
@@ -34,7 +35,7 @@ public class HomeFragment extends Fragment {
         dataPoints = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.yoink)));
         listView.setAdapter(
                 new ArrayAdapter<>(
-                        getActivity(),
+                        Objects.requireNonNull(getActivity()),
                         android.R.layout.simple_list_item_1,
                         dataPoints
                 )
@@ -53,6 +54,12 @@ public class HomeFragment extends Fragment {
 
     private void shuffle(){
         Collections.shuffle(dataPoints, new Random(System.currentTimeMillis()));
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, dataPoints));
+        listView.setAdapter(
+                new ArrayAdapter<>(
+                        Objects.requireNonNull(getActivity()),
+                        android.R.layout.simple_list_item_1,
+                        dataPoints
+                )
+        );
     }
 }
