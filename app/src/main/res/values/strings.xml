@@ -14,4 +14,6 @@
 
     <string name="bookmarked">Bookmarked</string>
     <string name="not_bookmarked">Not Bookmarked</string>
+
+    <string name="trending_search">Enter Search Term:</string>
 </resources>
