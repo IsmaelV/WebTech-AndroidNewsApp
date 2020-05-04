@@ -32,7 +32,6 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
-    private ListView listView;
     private SwipeRefreshLayout r;
     private RequestQueue mqueue;
     private ArrayAdapter myArrayAdapter;
@@ -47,7 +46,7 @@ public class HomeFragment extends Fragment {
         mqueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         tmp_list = new ArrayList<>();
         all_news = new ArrayList<>();
-        listView = root.findViewById(R.id.home_list);
+        ListView listView = root.findViewById(R.id.home_list);
         myArrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
                 android.R.layout.simple_list_item_1,
                 tmp_list);
@@ -59,18 +58,12 @@ public class HomeFragment extends Fragment {
         r.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-//                jsonParse();
-                shuffle();
+                jsonParse();
                 r.setRefreshing(false);
             }
         });
 
         return root;
-    }
-
-    private void shuffle(){
-        Collections.shuffle(tmp_list, new Random(System.currentTimeMillis()));
-        myArrayAdapter.notifyDataSetChanged();
     }
 
     private void jsonParse() {
@@ -93,6 +86,7 @@ public class HomeFragment extends Fragment {
                                 tmp_list.add(singleArticle.getTitle() + ", " + singleArticle.getSection() + ", " + singleArticle.getDate());
                                 all_news.add(singleArticle);
                             }
+                            myArrayAdapter.notifyDataSetChanged();
                         }
                         catch (JSONException e){
                             e.printStackTrace();
