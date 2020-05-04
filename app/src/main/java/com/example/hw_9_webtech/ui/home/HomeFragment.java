@@ -35,6 +35,7 @@ public class HomeFragment extends Fragment {
     private ListView listView;
     private SwipeRefreshLayout r;
     private RequestQueue mqueue;
+    private ArrayAdapter myArrayAdapter;
     private JSONArray results;
     private List<NewsArticle> all_news;
     private List<String> tmp_list;  // Only temporarily used to display text in a list
@@ -46,30 +47,20 @@ public class HomeFragment extends Fragment {
         mqueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         tmp_list = new ArrayList<>();
         all_news = new ArrayList<>();
+        listView = root.findViewById(R.id.home_list);
+        myArrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
+                android.R.layout.simple_list_item_1,
+                tmp_list);
+        listView.setAdapter(myArrayAdapter);
         jsonParse();
 
         r = root.findViewById(R.id.home_refresher);
-        listView = root.findViewById(R.id.home_list);
-        listView.setAdapter(
-                new ArrayAdapter<>(
-                        Objects.requireNonNull(getActivity()),
-                        android.R.layout.simple_list_item_1,
-                        tmp_list
-                )
-        );
 
         r.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 //                jsonParse();
                 shuffle();
-//                listView.setAdapter(
-//                        new ArrayAdapter<>(
-//                                Objects.requireNonNull(getActivity()),
-//                                android.R.layout.simple_list_item_1,
-//                                tmp_list
-//                        )
-//                );
                 r.setRefreshing(false);
             }
         });
@@ -79,13 +70,7 @@ public class HomeFragment extends Fragment {
 
     private void shuffle(){
         Collections.shuffle(tmp_list, new Random(System.currentTimeMillis()));
-        listView.setAdapter(
-                new ArrayAdapter<>(
-                        Objects.requireNonNull(getActivity()),
-                        android.R.layout.simple_list_item_1,
-                        tmp_list
-                )
-        );
+        myArrayAdapter.notifyDataSetChanged();
     }
 
     private void jsonParse() {
