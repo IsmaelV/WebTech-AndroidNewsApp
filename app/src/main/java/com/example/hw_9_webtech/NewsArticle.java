@@ -19,6 +19,27 @@ public class NewsArticle {
         }
     }
 
+    public NewsArticle(String allInfo){
+        String[] sepInfo = allInfo.split("#####");
+        title = sepInfo[0];
+        imgURL = sepInfo[1];
+        section = sepInfo[2];
+        content = sepInfo[3];
+        articleID = sepInfo[4];
+        webURL = sepInfo[5];
+        date = sepInfo[6];
+    }
+
+    public String toString(){
+        return title +
+                "#####" + imgURL +
+                "#####" + section +
+                "#####" + content +
+                "#####" + articleID +
+                "#####" + webURL +
+                "#####" + date;
+    }
+
     private void extractHome(JSONObject article){
         try {
             // Set all values
