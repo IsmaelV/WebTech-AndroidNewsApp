@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refresher"
+        android:id="@+id/home_refresher"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ListView

@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment {
         all_news = new ArrayList<>();
         jsonParse();
 
-        r = root.findViewById(R.id.refresher);
+        r = root.findViewById(R.id.home_refresher);
         listView = root.findViewById(R.id.home_list);
         listView.setAdapter(
                 new ArrayAdapter<>(
