@@ -4,13 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,10 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
@@ -86,7 +79,6 @@ public class HomeFragment extends Fragment {
                                     .getJSONArray("results");
 
                             for(int i = 0; i < results.length(); i++){
-//                                NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i), "home");
                                 all_news.add(new NewsArticle(results.getJSONObject(i), "home"));
                             }
                             myRVAdapter.notifyDataSetChanged();

@@ -40,7 +40,7 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
 
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_home_card, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_card, viewGroup, false);
         return new ArticleViewHolder(v);
     }
 
