@@ -65,8 +65,7 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                 .load(myNews.get(i).getImgURL())
                 .fit()
                 .into(articleViewHolder.im);
-        Drawable myDraw = articleViewHolder.cv.getResources().getDrawable(R.drawable.ic_not_bookmarked);
-        articleViewHolder.bm.setImageDrawable(myDraw);
+        articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked); // Haven't checked if bookmarked or not
         articleViewHolder.bm.setContentDescription("Not Bookmarked");
         articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
         SimpleDateFormat sdfENG = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
