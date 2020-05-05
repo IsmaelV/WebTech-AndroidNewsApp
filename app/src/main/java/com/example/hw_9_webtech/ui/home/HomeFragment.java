@@ -6,9 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
@@ -34,23 +39,23 @@ public class HomeFragment extends Fragment {
 
     private SwipeRefreshLayout r;
     private RequestQueue mqueue;
-    private ArrayAdapter myArrayAdapter;
     private JSONArray results;
     private List<NewsArticle> all_news;
-    private List<String> tmp_list;  // Only temporarily used to display text in a list
+    private RVCardAdapter myRVAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         mqueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
-        tmp_list = new ArrayList<>();
         all_news = new ArrayList<>();
-        ListView listView = root.findViewById(R.id.home_list);
-        myArrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                android.R.layout.simple_list_item_1,
-                tmp_list);
-        listView.setAdapter(myArrayAdapter);
+
+        RecyclerView recyclerView = root.findViewById(R.id.home_list);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        myRVAdapter = new RVCardAdapter(all_news);
+        recyclerView.setAdapter(myRVAdapter);
+        recyclerView.setLayoutManager(llm);
+
         jsonParse();
 
         r = root.findViewById(R.id.home_refresher);
@@ -68,7 +73,6 @@ public class HomeFragment extends Fragment {
 
     private void jsonParse() {
         String apiURL = "https://ivillega-nytimes-guardian.wl.r.appspot.com/guardian/home";
-        tmp_list.clear();
         all_news.clear();
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -82,11 +86,10 @@ public class HomeFragment extends Fragment {
                                     .getJSONArray("results");
 
                             for(int i = 0; i < results.length(); i++){
-                                NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i), "home");
-                                tmp_list.add(singleArticle.getTitle() + ", " + singleArticle.getSection() + ", " + singleArticle.getDate());
-                                all_news.add(singleArticle);
+//                                NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i), "home");
+                                all_news.add(new NewsArticle(results.getJSONObject(i), "home"));
                             }
-                            myArrayAdapter.notifyDataSetChanged();
+                            myRVAdapter.notifyDataSetChanged();
                         }
                         catch (JSONException e){
                             e.printStackTrace();
