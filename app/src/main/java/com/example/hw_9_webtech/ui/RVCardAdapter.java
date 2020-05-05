@@ -59,7 +59,10 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     @Override
     public void onBindViewHolder(ArticleViewHolder articleViewHolder, int i){
         articleViewHolder.t.setText(myNews.get(i).getTitle());
-        Picasso.with(articleViewHolder.im.getContext()).load(myNews.get(i).getImgURL()).fit().into(articleViewHolder.im);
+        Picasso.with(articleViewHolder.im.getContext())
+                .load(myNews.get(i).getImgURL())
+                .fit()
+                .into(articleViewHolder.im);
         articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
         SimpleDateFormat sdfENG = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         sdfENG.setTimeZone(TimeZone.GMT_ZONE);
