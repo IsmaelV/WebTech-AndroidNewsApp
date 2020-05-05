@@ -12,17 +12,25 @@ import com.example.hw_9_webtech.R;
 
 public class HeadlineTabFragment extends Fragment {
 
-    private static String urlCall;
-    private static String section;
+    private String urlCall;
+    private String section;
 
-    static Fragment getInstance(int position){
+    static Fragment getInstance(int position, String s){
         Bundle bundle = new Bundle();
         bundle.putInt("pos", position);
+        String urlToSave = "https://ivillega-nytimes-guardian.wl.r.appspot.com/guardian/" + s;
+        bundle.putString("sectionToShow", s);
+        bundle.putString("urlToShow", urlToSave);
         HeadlineTabFragment headlineTabFragment = new HeadlineTabFragment();
         headlineTabFragment.setArguments(bundle);
-        section = getSection(position);
-        urlCall = "https://ivillega-nytimes-guardian.wl.r.appspot.com/guardian/" + getSection(position);
         return headlineTabFragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        section = getArguments().getString("sectionToShow");
+        urlCall = getArguments().getString("urlToShow");
     }
 
     @Override

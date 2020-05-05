@@ -11,8 +11,22 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         super(manager);
     }
 
-    @Override public Fragment getItem(int position){
-        return HeadlineTabFragment.getInstance(position);
+    @Override
+    public Fragment getItem(int position){
+        switch(position){
+            case 0:
+                return HeadlineTabFragment.getInstance(position, "world");
+            case 1:
+                return HeadlineTabFragment.getInstance(position, "politics");
+            case 2:
+                return HeadlineTabFragment.getInstance(position, "business");
+            case 3:
+                return HeadlineTabFragment.getInstance(position, "technology");
+            case 4:
+                return HeadlineTabFragment.getInstance(position, "sports");
+            default:
+                return HeadlineTabFragment.getInstance(position, "ERROR");
+        }
     }
 
     @Override
