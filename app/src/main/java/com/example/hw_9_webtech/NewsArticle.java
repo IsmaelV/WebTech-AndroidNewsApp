@@ -13,8 +13,13 @@ public class NewsArticle {
     private String webURL;
     private String date;
 
-    public NewsArticle(JSONObject article) {
-        extractHome(article);
+    public NewsArticle(JSONObject article, String type) {
+        if (type.equals("normal")){
+            extractHome(article);
+        }
+        else if(type.equals("detailed")){
+            System.out.println("Parse for detailed");
+        }
     }
 
     public NewsArticle(String allInfo){

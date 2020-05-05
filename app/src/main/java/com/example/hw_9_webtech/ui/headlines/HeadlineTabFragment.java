@@ -81,7 +81,7 @@ public class HeadlineTabFragment extends Fragment {
                                     .getJSONArray("results");
 
                             for(int i = 0; i < results.length(); i++){
-                                NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i));
+                                NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i), "normal");
                                 all_news.add(singleArticle);
                             }
                             myRVAdapter.notifyDataSetChanged();
