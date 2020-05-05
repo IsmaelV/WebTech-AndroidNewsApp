@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -34,6 +35,7 @@ public class HeadlineTabFragment extends Fragment {
     private RVCardAdapter myRVAdapter;
     private JSONArray results;
     private List<NewsArticle> all_news;
+    private SwipeRefreshLayout r;
 
     static Fragment getInstance(int position, String s){
         Bundle bundle = new Bundle();
@@ -63,6 +65,15 @@ public class HeadlineTabFragment extends Fragment {
         myRVAdapter = new RVCardAdapter(all_news);
         recyclerView.setAdapter(myRVAdapter);
         recyclerView.setLayoutManager(llm);
+
+        r = root.findViewById(R.id.tab_refresher);
+        r.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                jsonParse();
+                r.setRefreshing(false);
+            }
+        });
 
         return root;
     }
