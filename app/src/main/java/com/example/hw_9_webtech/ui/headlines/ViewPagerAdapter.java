@@ -7,12 +7,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     private String[] title = {"World", "Politics", "Business", "Technology", "Sports"};
 
-    public ViewPagerAdapter(FragmentManager manager){
+    ViewPagerAdapter(FragmentManager manager){
         super(manager);
     }
 
     @Override public Fragment getItem(int position){
-        return TabFragment.getInstance(position);
+        return HeadlineTabFragment.getInstance(position);
     }
 
     @Override
