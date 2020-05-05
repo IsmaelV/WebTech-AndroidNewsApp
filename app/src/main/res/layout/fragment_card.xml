@@ -28,19 +28,28 @@
 
         <TextView
             android:id="@+id/cardTitleText"
-            android:layout_width="180dp"
-            android:layout_height="90dp"
+            android:layout_width="184dp"
+            android:layout_height="83dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="13dp"
+            android:layout_toStartOf="@+id/bookmark_icon"
             android:layout_toEndOf="@+id/cardImgURL"
+            android:ellipsize="end"
+            android:maxLines="3"
             android:textAlignment="viewStart"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="3"/>
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/bookmark_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp" />
 
         <TextView
             android:id="@+id/cardDateSection"

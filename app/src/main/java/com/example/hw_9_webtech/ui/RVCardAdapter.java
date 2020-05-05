@@ -1,5 +1,6 @@
 package com.example.hw_9_webtech.ui;
 
+import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
 import android.net.Uri;
@@ -30,13 +31,14 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     static class ArticleViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
         TextView t, ds;
-        ImageView im;
+        ImageView im, bm;
 
         ArticleViewHolder(View itemView){
             super(itemView);
             cv = itemView.findViewById(R.id.home_card_wrapper);
             t = itemView.findViewById(R.id.cardTitleText);
             im = itemView.findViewById(R.id.cardImgURL);
+            bm = itemView.findViewById(R.id.bookmark_icon);
             ds = itemView.findViewById(R.id.cardDateSection);
         }
     }
@@ -63,6 +65,9 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                 .load(myNews.get(i).getImgURL())
                 .fit()
                 .into(articleViewHolder.im);
+        Drawable myDraw = articleViewHolder.cv.getResources().getDrawable(R.drawable.ic_not_bookmarked);
+        articleViewHolder.bm.setImageDrawable(myDraw);
+        articleViewHolder.bm.setContentDescription("Not Bookmarked");
         articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
         SimpleDateFormat sdfENG = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         sdfENG.setTimeZone(TimeZone.GMT_ZONE);
