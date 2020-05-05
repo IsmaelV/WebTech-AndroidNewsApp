@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
-    private String[] title = {"World", "Politics", "Business", "Technology", "Sports"};
+    private String[] title = {"World", "Politics", "Business", "Sports", "Technology", "Science"};
 
     ViewPagerAdapter(FragmentManager manager){
         super(manager);
@@ -21,9 +21,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return HeadlineTabFragment.getInstance(position, "business");
             case 3:
-                return HeadlineTabFragment.getInstance(position, "technology");
-            case 4:
                 return HeadlineTabFragment.getInstance(position, "sports");
+            case 4:
+                return HeadlineTabFragment.getInstance(position, "technology");
+            case 5:
+                return HeadlineTabFragment.getInstance(position, "science");
             default:
                 return HeadlineTabFragment.getInstance(position, "ERROR");
         }

@@ -53,8 +53,9 @@ public class TabController extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText(R.string.world));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.politics));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.business));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.technology));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.sports));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.technology));
+        tabLayout.addTab(tabLayout.newTab().setText(R.string.science));
     }
 
     @Override
