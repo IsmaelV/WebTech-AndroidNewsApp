@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_headlines"
-        android:name="com.example.hw_9_webtech.ui.headlines.HeadlinesFragment"
+        android:name="com.example.hw_9_webtech.ui.headlines.TabController"
         android:label="@string/NewsApp"
-        tools:layout="@layout/fragment_headlines" />
+        tools:layout="@layout/fragments_headlines" />
 
     <fragment
         android:id="@+id/navigation_trending"
