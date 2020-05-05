@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +17,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hw_9_webtech.NewsArticle;
 import com.example.hw_9_webtech.R;
+import com.example.hw_9_webtech.ui.RVCardAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,11 +30,10 @@ import java.util.Objects;
 public class HeadlineTabFragment extends Fragment {
 
     private String urlCall;
-    private RequestQueue mqueue;
-    private ArrayAdapter myArrayAdapter;
+    private RequestQueue myQueue;
+    private RVCardAdapter myRVAdapter;
     private JSONArray results;
     private List<NewsArticle> all_news;
-    private List<String> tmp_list;  // Only temporarily used to display text in a list
 
     static Fragment getInstance(int position, String s){
         Bundle bundle = new Bundle();
@@ -49,8 +49,7 @@ public class HeadlineTabFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         urlCall = Objects.requireNonNull(getArguments()).getString("urlToShow");
-        mqueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
-        tmp_list = new ArrayList<>();
+        myQueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         all_news = new ArrayList<>();
         jsonParse();
     }
@@ -59,17 +58,16 @@ public class HeadlineTabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View root = inflater.inflate(R.layout.fragment_tab, container, false);
 
-        ListView listView = root.findViewById(R.id.headline_list);
-        myArrayAdapter = new ArrayAdapter<>(Objects.requireNonNull(getActivity()),
-                android.R.layout.simple_list_item_1,
-                tmp_list);
-        listView.setAdapter(myArrayAdapter);
+        RecyclerView recyclerView = root.findViewById(R.id.headline_list);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+        myRVAdapter = new RVCardAdapter(all_news);
+        recyclerView.setAdapter(myRVAdapter);
+        recyclerView.setLayoutManager(llm);
 
         return root;
     }
 
     private void jsonParse() {
-        tmp_list.clear();
         all_news.clear();
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -84,10 +82,9 @@ public class HeadlineTabFragment extends Fragment {
 
                             for(int i = 0; i < results.length(); i++){
                                 NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i), "home");
-                                tmp_list.add(singleArticle.getTitle() + ", " + singleArticle.getSection() + ", " + singleArticle.getDate());
                                 all_news.add(singleArticle);
                             }
-                            myArrayAdapter.notifyDataSetChanged();
+                            myRVAdapter.notifyDataSetChanged();
                         }
                         catch (JSONException e){
                             e.printStackTrace();
@@ -100,6 +97,6 @@ public class HeadlineTabFragment extends Fragment {
                         error.printStackTrace();
                     }
                 });
-        mqueue.add(request);
+        myQueue.add(request);
     }
 }
