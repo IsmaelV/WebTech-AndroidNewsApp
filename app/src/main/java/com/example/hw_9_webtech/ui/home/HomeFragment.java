@@ -19,6 +19,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.hw_9_webtech.NewsArticle;
 import com.example.hw_9_webtech.R;
+import com.example.hw_9_webtech.ui.RVCardAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;

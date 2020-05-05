@@ -1,4 +1,4 @@
-package com.example.hw_9_webtech.ui.home;
+package com.example.hw_9_webtech.ui;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +29,7 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
         }
     }
 
-    RVCardAdapter(List<NewsArticle> myNews){
+    public RVCardAdapter(List<NewsArticle> myNews){
         this.myNews = myNews;
     }
 
