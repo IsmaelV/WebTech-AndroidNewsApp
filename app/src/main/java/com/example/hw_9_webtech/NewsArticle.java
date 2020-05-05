@@ -13,10 +13,8 @@ public class NewsArticle {
     private String webURL;
     private String date;
 
-    public NewsArticle(JSONObject article, String type) {
-        if (type.equals("home")){
-            extractHome(article);
-        }
+    public NewsArticle(JSONObject article) {
+        extractHome(article);
     }
 
     public NewsArticle(String allInfo){
@@ -46,7 +44,7 @@ public class NewsArticle {
             title = article.getString("webTitle");
             articleID = article.getString("id");
             webURL = article.getString("webUrl");
-            section = article.getString("sectionId");
+            section = article.getString("sectionName");
             date = article.getString("webPublicationDate");
             content = article.getJSONObject("blocks")
                     .getJSONArray("body")

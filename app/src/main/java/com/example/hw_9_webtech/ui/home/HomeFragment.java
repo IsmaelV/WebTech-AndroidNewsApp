@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment {
                                     .getJSONArray("results");
 
                             for(int i = 0; i < results.length(); i++){
-                                all_news.add(new NewsArticle(results.getJSONObject(i), "home"));
+                                all_news.add(new NewsArticle(results.getJSONObject(i)));
                             }
                             myRVAdapter.notifyDataSetChanged();
                         }
