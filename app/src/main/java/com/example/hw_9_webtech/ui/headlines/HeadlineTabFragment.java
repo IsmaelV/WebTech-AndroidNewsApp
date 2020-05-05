@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -30,7 +29,6 @@ import java.util.Objects;
 public class HeadlineTabFragment extends Fragment {
 
     private String urlCall;
-    private String section;
     private RequestQueue mqueue;
     private ArrayAdapter myArrayAdapter;
     private JSONArray results;
@@ -41,7 +39,6 @@ public class HeadlineTabFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putInt("pos", position);
         String urlToSave = "https://ivillega-nytimes-guardian.wl.r.appspot.com/guardian/" + s;
-        bundle.putString("sectionToShow", s);
         bundle.putString("urlToShow", urlToSave);
         HeadlineTabFragment headlineTabFragment = new HeadlineTabFragment();
         headlineTabFragment.setArguments(bundle);
@@ -51,8 +48,7 @@ public class HeadlineTabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        section = getArguments().getString("sectionToShow");
-        urlCall = getArguments().getString("urlToShow");
+        urlCall = Objects.requireNonNull(getArguments()).getString("urlToShow");
         mqueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         tmp_list = new ArrayList<>();
         all_news = new ArrayList<>();
