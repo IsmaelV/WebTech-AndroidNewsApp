@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <ImageView
             android:id="@+id/cardImgURL"
             android:layout_width="143dp"
             android:layout_height="match_parent"

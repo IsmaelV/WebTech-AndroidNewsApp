@@ -2,10 +2,12 @@ package com.example.hw_9_webtech.ui;
 
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
+import android.net.Uri;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hw_9_webtech.NewsArticle;
 import com.example.hw_9_webtech.R;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -26,7 +29,8 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
 
     static class ArticleViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
-        TextView t, im, ds;
+        TextView t, ds;
+        ImageView im;
 
         ArticleViewHolder(View itemView){
             super(itemView);
@@ -55,7 +59,8 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     @Override
     public void onBindViewHolder(ArticleViewHolder articleViewHolder, int i){
         articleViewHolder.t.setText(myNews.get(i).getTitle());
-        articleViewHolder.im.setText(myNews.get(i).getImgURL());
+        Picasso.with(articleViewHolder.im.getContext()).load(myNews.get(i).getImgURL()).fit().into(articleViewHolder.im);
+        articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
         SimpleDateFormat sdfENG = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         sdfENG.setTimeZone(TimeZone.GMT_ZONE);
         Date myDateENG = new Date();
