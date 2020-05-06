@@ -1,5 +1,7 @@
 package com.example.hw_9_webtech.ui;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
@@ -27,6 +29,7 @@ import java.util.List;
 
 public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleViewHolder>{
     private List<NewsArticle> myNews;
+    private Context parentContext;
 
     static class ArticleViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
@@ -55,11 +58,12 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_card, viewGroup, false);
+        parentContext = viewGroup.getContext();
         return new ArticleViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ArticleViewHolder articleViewHolder, int i){
+    public void onBindViewHolder(final ArticleViewHolder articleViewHolder, final int i){
         articleViewHolder.t.setText(myNews.get(i).getTitle());
         Picasso.with(articleViewHolder.im.getContext())
                 .load(myNews.get(i).getImgURL())
@@ -80,5 +84,27 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
         CharSequence myStringDate = DateUtils.getRelativeTimeSpanString(myDateENG.getTime());
         String myDateSection = myStringDate.toString() + " | " + myNews.get(i).getSection();
         articleViewHolder.ds.setText(myDateSection);
+
+        articleViewHolder.cv.setOnLongClickListener(new View.OnLongClickListener(){
+            @Override
+            public boolean onLongClick(View view){
+                final Dialog myDialog = new Dialog(parentContext);
+                myDialog.setContentView(R.layout.fragment_popup_dialog);
+                myDialog.setCancelable(true);
+                ImageView dialogImage = myDialog.findViewById(R.id.dialog_image);
+                Picasso.with(dialogImage.getContext())
+                        .load(myNews.get(i).getImgURL())
+                        .fit()
+                        .into(dialogImage);
+                TextView dialog_title = myDialog.findViewById(R.id.dialog_title);
+                dialog_title.setText(myNews.get(i).getTitle());
+                ((ImageView) myDialog.findViewById(R.id.dialog_twitter_icon))
+                        .setImageResource(R.drawable.ic_twitter);
+                ((ImageView) myDialog.findViewById(R.id.dialog_bookmark_icon))
+                        .setImageResource(R.drawable.ic_not_bookmarked);
+                myDialog.show();
+                return true;
+            }
+        });
     }
 }
