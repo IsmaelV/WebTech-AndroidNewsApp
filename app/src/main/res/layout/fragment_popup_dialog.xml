@@ -31,10 +31,11 @@
         android:stretchColumns="0,1">
 
         <TableRow>
-            <ImageView
+            <ImageButton
                 android:id="@+id/dialog_twitter_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:src="@drawable/ic_twitter"
                 android:contentDescription="Twitter Icon"/>
             <ImageView
                 android:id="@+id/dialog_bookmark_icon"

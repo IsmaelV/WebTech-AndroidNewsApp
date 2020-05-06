@@ -2,6 +2,7 @@ package com.example.hw_9_webtech.ui;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
@@ -10,6 +11,7 @@ import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -98,8 +100,15 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                         .into(dialogImage);
                 TextView dialog_title = myDialog.findViewById(R.id.dialog_title);
                 dialog_title.setText(myNews.get(i).getTitle());
-                ((ImageView) myDialog.findViewById(R.id.dialog_twitter_icon))
-                        .setImageResource(R.drawable.ic_twitter);
+                ImageButton twitterButton = myDialog.findViewById(R.id.dialog_twitter_icon);
+                twitterButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://www.twitter.com/intent/tweet?url=" + myNews.get(i).getWebURL()+"&hashtags=CSCI_571_NewsApp"));
+                        parentContext.startActivity(intent);
+                    }
+                });
                 ((ImageView) myDialog.findViewById(R.id.dialog_bookmark_icon))
                         .setImageResource(R.drawable.ic_not_bookmarked);
                 myDialog.show();
