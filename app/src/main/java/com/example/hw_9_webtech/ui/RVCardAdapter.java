@@ -36,6 +36,7 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     private List<NewsArticle> myNews;
     private Context parentContext;
     private SharedPreferences pref;
+    private boolean gridView = false;
 
     static class ArticleViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
@@ -55,6 +56,10 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     public RVCardAdapter(List<NewsArticle> myNews){
         this.myNews = myNews;
     }
+    public RVCardAdapter(List<NewsArticle> myNews, boolean grid){
+        this.myNews = myNews;
+        this.gridView = grid;
+    }
 
     @Override
     public int getItemCount(){
@@ -63,9 +68,15 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
 
     @Override
     public ArticleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_card, viewGroup, false);
+        View v;
+        if(gridView){
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_card_bookmarked, viewGroup, false);
+        }
+        else {
+            v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_card, viewGroup, false);
+        }
         parentContext = viewGroup.getContext();
-        pref = viewGroup.getContext().getSharedPreferences(parentContext.getResources().getString(R.string.bookmark_pref), 0);
+        pref = parentContext.getSharedPreferences(parentContext.getResources().getString(R.string.bookmark_pref), 0);
         return new ArticleViewHolder(v);
     }
 
@@ -137,18 +148,18 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                         String toToast;
                         if(pref.contains(myNews.get(i).getArticleID())){
                             editor.remove(myNews.get(i).getArticleID());
-                            Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.bookmark_pref), new HashSet<String>());
+                            Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.all_bookmarked), new HashSet<String>());
                             allArticles.remove(myNews.get(i).getArticleID());
-                            editor.putStringSet("ALL MY BOOKMARKS", allArticles);
+                            editor.putStringSet(parentContext.getResources().getString(R.string.all_bookmarked), allArticles);
                             articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked);
                             bookmarkButton.setImageResource(R.drawable.ic_not_bookmarked);
                             toToast = "\"" + myNews.get(i).getTitle() + "\" was removed from Bookmarks";
                         }
                         else{
                             editor.putString(myNews.get(i).getArticleID(), myNews.get(i).toString());
-                            Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.bookmark_pref), new HashSet<String>());
+                            Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.all_bookmarked), new HashSet<String>());
                             allArticles.add(myNews.get(i).getArticleID());
-                            editor.putStringSet("ALL MY BOOKMARKS", allArticles);
+                            editor.putStringSet(parentContext.getResources().getString(R.string.all_bookmarked), allArticles);
                             articleViewHolder.bm.setImageResource(R.drawable.ic_bookmarked);
                             bookmarkButton.setImageResource(R.drawable.ic_bookmarked);
                             toToast = "\"" + myNews.get(i).getTitle() + "\" was added to Bookmarks";
@@ -156,6 +167,7 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                         editor.apply();
                         toast = Toast.makeText(parentContext, toToast, Toast.LENGTH_SHORT);
                         toast.show();
+                        if(gridView){ notifyDataSetChanged(); }
                     }
                 });
                 myDialog.show();
