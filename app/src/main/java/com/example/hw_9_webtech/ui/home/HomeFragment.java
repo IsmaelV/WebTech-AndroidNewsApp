@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -36,10 +37,13 @@ public class HomeFragment extends Fragment {
     private JSONArray results;
     private List<NewsArticle> all_news;
     private RVCardAdapter myRVAdapter;
+    private RelativeLayout myProgressBar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        myProgressBar = root.findViewById(R.id.progress_container);
 
         mqueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
         all_news = new ArrayList<>();
@@ -82,6 +86,7 @@ public class HomeFragment extends Fragment {
                             for(int i = 0; i < results.length(); i++){
                                 all_news.add(new NewsArticle(results.getJSONObject(i), "normal"));
                             }
+                            myProgressBar.setVisibility(View.GONE);
                             myRVAdapter.notifyDataSetChanged();
                         }
                         catch (JSONException e){

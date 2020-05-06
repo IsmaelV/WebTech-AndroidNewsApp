@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +37,7 @@ public class HeadlineTabFragment extends Fragment {
     private JSONArray results;
     private List<NewsArticle> all_news;
     private SwipeRefreshLayout r;
+    private RelativeLayout myProgressBar;
 
     static Fragment getInstance(int position, String s){
         Bundle bundle = new Bundle();
@@ -59,6 +61,8 @@ public class HeadlineTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View root = inflater.inflate(R.layout.fragment_tab, container, false);
+
+        myProgressBar = root.findViewById(R.id.progress_container);
 
         RecyclerView recyclerView = root.findViewById(R.id.headline_list);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -95,6 +99,7 @@ public class HeadlineTabFragment extends Fragment {
                                 NewsArticle singleArticle = new NewsArticle(results.getJSONObject(i), "normal");
                                 all_news.add(singleArticle);
                             }
+                            myProgressBar.setVisibility(View.GONE);
                             myRVAdapter.notifyDataSetChanged();
                         }
                         catch (JSONException e){
