@@ -95,8 +95,38 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
             articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked);
             articleViewHolder.bm.setContentDescription("Not Bookmarked");
         }
-//        articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked); // Haven't checked if bookmarked or not
-//        articleViewHolder.bm.setContentDescription("Not Bookmarked");
+        articleViewHolder.bm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = pref.edit();
+                Toast toast;
+                String toToast;
+                if(pref.contains(myNews.get(i).getArticleID())){
+                    editor.remove(myNews.get(i).getArticleID());
+                    Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.all_bookmarked), new HashSet<String>());
+                    allArticles.remove(myNews.get(i).getArticleID());
+                    editor.putStringSet(parentContext.getResources().getString(R.string.all_bookmarked), allArticles);
+                    articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked);
+                    toToast = "\"" + myNews.get(i).getTitle() + "\" was removed from Bookmarks";
+                    if(gridView){
+                        myNews.remove(i);
+                        notifyItemRemoved(i);
+                        notifyItemRangeChanged(i, myNews.size());
+                    }
+                }
+                else{
+                    editor.putString(myNews.get(i).getArticleID(), myNews.get(i).toString());
+                    Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.all_bookmarked), new HashSet<String>());
+                    allArticles.add(myNews.get(i).getArticleID());
+                    editor.putStringSet(parentContext.getResources().getString(R.string.all_bookmarked), allArticles);
+                    articleViewHolder.bm.setImageResource(R.drawable.ic_bookmarked);
+                    toToast = "\"" + myNews.get(i).getTitle() + "\" was added to Bookmarks";
+                }
+                editor.apply();
+                toast = Toast.makeText(parentContext, toToast, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
         articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
         SimpleDateFormat sdfENG = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         sdfENG.setTimeZone(TimeZone.GMT_ZONE);
@@ -154,6 +184,12 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                             articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked);
                             bookmarkButton.setImageResource(R.drawable.ic_not_bookmarked);
                             toToast = "\"" + myNews.get(i).getTitle() + "\" was removed from Bookmarks";
+                            if(gridView){
+                                myNews.remove(i);
+                                notifyItemRemoved(i);
+                                notifyItemRangeChanged(i, myNews.size());
+                                myDialog.dismiss();
+                            }
                         }
                         else{
                             editor.putString(myNews.get(i).getArticleID(), myNews.get(i).toString());
@@ -167,7 +203,6 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                         editor.apply();
                         toast = Toast.makeText(parentContext, toToast, Toast.LENGTH_SHORT);
                         toast.show();
-                        if(gridView){ notifyDataSetChanged(); }
                     }
                 });
                 myDialog.show();
