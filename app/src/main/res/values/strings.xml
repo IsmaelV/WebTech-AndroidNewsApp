@@ -13,6 +13,8 @@
     <string name="technology">Technology</string>
     <string name="science">Science</string>
 
+    <string name="bookmark_pref">My Bookmarks</string>
+    <string name="all_bookmarked">ALL MY BOOKMARKS</string>
     <string name="bookmarked">Bookmarked</string>
     <string name="not_bookmarked">Not Bookmarked</string>
 

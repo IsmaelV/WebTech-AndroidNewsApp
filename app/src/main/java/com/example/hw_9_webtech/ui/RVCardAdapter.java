@@ -3,7 +3,7 @@ package com.example.hw_9_webtech.ui;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
 import android.net.Uri;
@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +25,9 @@ import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 // Great GREAT resource for RecyclerView:
 // https://code.tutsplus.com/tutorials/getting-started-with-recyclerview-and-cardview-on-android--cms-23465
@@ -32,6 +35,7 @@ import java.util.List;
 public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleViewHolder>{
     private List<NewsArticle> myNews;
     private Context parentContext;
+    private SharedPreferences pref;
 
     static class ArticleViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
@@ -61,6 +65,7 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     public ArticleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i){
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_card, viewGroup, false);
         parentContext = viewGroup.getContext();
+        pref = viewGroup.getContext().getSharedPreferences(parentContext.getResources().getString(R.string.bookmark_pref), 0);
         return new ArticleViewHolder(v);
     }
 
@@ -71,8 +76,16 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                 .load(myNews.get(i).getImgURL())
                 .fit()
                 .into(articleViewHolder.im);
-        articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked); // Haven't checked if bookmarked or not
-        articleViewHolder.bm.setContentDescription("Not Bookmarked");
+        if(pref.contains(myNews.get(i).getArticleID())){
+            articleViewHolder.bm.setImageResource(R.drawable.ic_bookmarked);
+            articleViewHolder.bm.setContentDescription("Bookmarked");
+        }
+        else{
+            articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked);
+            articleViewHolder.bm.setContentDescription("Not Bookmarked");
+        }
+//        articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked); // Haven't checked if bookmarked or not
+//        articleViewHolder.bm.setContentDescription("Not Bookmarked");
         articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
         SimpleDateFormat sdfENG = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         sdfENG.setTimeZone(TimeZone.GMT_ZONE);
@@ -109,8 +122,42 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                         parentContext.startActivity(intent);
                     }
                 });
-                ((ImageView) myDialog.findViewById(R.id.dialog_bookmark_icon))
-                        .setImageResource(R.drawable.ic_not_bookmarked);
+                final ImageButton bookmarkButton = myDialog.findViewById(R.id.dialog_bookmark_icon);
+                if (pref.contains(myNews.get(i).getArticleID())){
+                    bookmarkButton.setImageResource(R.drawable.ic_bookmarked);
+                }
+                else{
+                    bookmarkButton.setImageResource(R.drawable.ic_not_bookmarked);
+                }
+                bookmarkButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        SharedPreferences.Editor editor = pref.edit();
+                        Toast toast;
+                        String toToast;
+                        if(pref.contains(myNews.get(i).getArticleID())){
+                            editor.remove(myNews.get(i).getArticleID());
+                            Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.bookmark_pref), new HashSet<String>());
+                            allArticles.remove(myNews.get(i).getArticleID());
+                            editor.putStringSet("ALL MY BOOKMARKS", allArticles);
+                            articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked);
+                            bookmarkButton.setImageResource(R.drawable.ic_not_bookmarked);
+                            toToast = "\"" + myNews.get(i).getTitle() + "\" was removed from Bookmarks";
+                        }
+                        else{
+                            editor.putString(myNews.get(i).getArticleID(), myNews.get(i).toString());
+                            Set<String> allArticles = pref.getStringSet(parentContext.getResources().getString(R.string.bookmark_pref), new HashSet<String>());
+                            allArticles.add(myNews.get(i).getArticleID());
+                            editor.putStringSet("ALL MY BOOKMARKS", allArticles);
+                            articleViewHolder.bm.setImageResource(R.drawable.ic_bookmarked);
+                            bookmarkButton.setImageResource(R.drawable.ic_bookmarked);
+                            toToast = "\"" + myNews.get(i).getTitle() + "\" was added to Bookmarks";
+                        }
+                        editor.apply();
+                        toast = Toast.makeText(parentContext, toToast, Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
                 myDialog.show();
                 return true;
             }
