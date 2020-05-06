@@ -82,11 +82,23 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
 
     @Override
     public void onBindViewHolder(final ArticleViewHolder articleViewHolder, final int i){
+        // ------------------------------
+        // Set title
+        // ------------------------------
         articleViewHolder.t.setText(myNews.get(i).getTitle());
+
+        // ------------------------------
+        // Set image with content description
+        // ------------------------------
         Picasso.with(articleViewHolder.im.getContext())
                 .load(myNews.get(i).getImgURL())
                 .fit()
                 .into(articleViewHolder.im);
+        articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
+
+        // ------------------------------
+        // Set proper bookmark
+        // ------------------------------
         if(pref.contains(myNews.get(i).getArticleID())){
             articleViewHolder.bm.setImageResource(R.drawable.ic_bookmarked);
             articleViewHolder.bm.setContentDescription("Bookmarked");
@@ -95,6 +107,9 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
             articleViewHolder.bm.setImageResource(R.drawable.ic_not_bookmarked);
             articleViewHolder.bm.setContentDescription("Not Bookmarked");
         }
+        // ------------------------------
+        // Set onclick for bookmark
+        // ------------------------------
         articleViewHolder.bm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +142,11 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                 toast.show();
             }
         });
-        articleViewHolder.im.setContentDescription(articleViewHolder.t.toString());
+
+        // ------------------------------
+        // Set date with pretty view
+        // Uses x min ago, etc.
+        // ------------------------------
         SimpleDateFormat sdfENG = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss'Z'");
         sdfENG.setTimeZone(TimeZone.GMT_ZONE);
         Date myDateENG = new Date();
@@ -141,6 +160,13 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
         String myDateSection = myStringDate.toString() + " | " + myNews.get(i).getSection();
         articleViewHolder.ds.setText(myDateSection);
 
+        OnClickListenerToDetailedView myClickListener = new OnClickListenerToDetailedView(parentContext, myNews.get(i).getArticleID());
+        articleViewHolder.cv.setOnClickListener(myClickListener);
+
+        // ------------------------------
+        // OnLongClick for whole card
+        // Opens dialog
+        // ------------------------------
         articleViewHolder.cv.setOnLongClickListener(new View.OnLongClickListener(){
             @Override
             public boolean onLongClick(View view){
