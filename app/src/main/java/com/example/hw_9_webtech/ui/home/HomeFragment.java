@@ -1,6 +1,7 @@
 package com.example.hw_9_webtech.ui.home;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -59,10 +60,12 @@ public class HomeFragment extends Fragment {
     private int weatherTemperature;
     private CardView weatherCard;
     private View root;
+    private Activity parent;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
+        parent = getActivity();
 
         weatherCard = root.findViewById(R.id.weather_card_wrapper);
         weatherCard.setVisibility(View.GONE);
@@ -182,7 +185,7 @@ public class HomeFragment extends Fragment {
         mqueue.add(request);
     }
 
-    public void populateLocationCard() throws IOException {
+    private void populateLocationCard() throws IOException {
         LocationManager locationManager = (LocationManager) root.getContext().getSystemService(Context.LOCATION_SERVICE);
         String provider = locationManager.getBestProvider(new Criteria(), false);
         if (ActivityCompat.checkSelfPermission(root.getContext(),
@@ -199,9 +202,18 @@ public class HomeFragment extends Fragment {
             return;
         }
         Location lastLocation = locationManager.getLastKnownLocation(provider);
-        Double lat = lastLocation.getLatitude();
-        Double lng = lastLocation.getLongitude();
-        Geocoder geocoder = new Geocoder(root.getContext(), Locale.getDefault());
+        Double lat;
+        Double lng;
+        try {
+            lat = lastLocation.getLatitude();
+            lng = lastLocation.getLongitude();
+        }
+        catch (NullPointerException npe){
+            lat = 34.0522;
+            lng = -118.2437;
+            System.out.println("Defaulting to Los Angeles");
+        }
+        Geocoder geocoder = new Geocoder(parent, Locale.getDefault());
         List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
         cityName = addresses.get(0).getLocality();
         stateName = addresses.get(0).getAdminArea();
