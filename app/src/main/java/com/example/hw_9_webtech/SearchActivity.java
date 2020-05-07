@@ -44,13 +44,6 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationIcon(R.drawable.ic_back_arrow_gray_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                finish();
-            }
-        });
 
         query = getIntent().getExtras().getString("query", null);
         getSupportActionBar().setTitle("Search Results for " + query);
@@ -78,12 +71,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu){
-//        getMenuInflater().inflate(R.menu.top_search_activity_menu, menu);
-//        return true;
-//    }
 
     public void jsonParse(){
         all_news.clear();
