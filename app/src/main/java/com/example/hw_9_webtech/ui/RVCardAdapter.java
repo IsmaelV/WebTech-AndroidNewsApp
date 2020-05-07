@@ -37,6 +37,7 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     private Context parentContext;
     private SharedPreferences pref;
     private boolean gridView = false;
+    private View bookmarkFragment;
 
     static class ArticleViewHolder extends RecyclerView.ViewHolder{
         CardView cv;
@@ -56,9 +57,10 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
     public RVCardAdapter(List<NewsArticle> myNews){
         this.myNews = myNews;
     }
-    public RVCardAdapter(List<NewsArticle> myNews, boolean grid){
+    public RVCardAdapter(List<NewsArticle> myNews, boolean grid, View bookmarkFragment){
         this.myNews = myNews;
         this.gridView = grid;
+        this.bookmarkFragment = bookmarkFragment;
     }
 
     @Override
@@ -76,6 +78,12 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
             v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.fragment_card, viewGroup, false);
         }
         parentContext = viewGroup.getContext();
+        if(gridView && getItemCount() >= 1){
+            bookmarkFragment.findViewById(R.id.no_bookmarks).setVisibility(View.GONE);
+        }
+        else if(gridView && getItemCount() < 1){
+            bookmarkFragment.findViewById(R.id.no_bookmarks).setVisibility(View.VISIBLE);
+        }
         pref = parentContext.getSharedPreferences(parentContext.getResources().getString(R.string.bookmark_pref), 0);
         return new ArticleViewHolder(v);
     }
@@ -125,6 +133,9 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                     toToast = "\"" + myNews.get(i).getTitle() + "\" was removed from Bookmarks";
                     if(gridView){
                         myNews.remove(i);
+                        if(getItemCount() < 1){
+                            bookmarkFragment.findViewById(R.id.no_bookmarks).setVisibility(View.VISIBLE);
+                        }
                         notifyItemRemoved(i);
                         notifyItemRangeChanged(i, myNews.size());
                     }
@@ -212,6 +223,9 @@ public class RVCardAdapter extends RecyclerView.Adapter<RVCardAdapter.ArticleVie
                             toToast = "\"" + myNews.get(i).getTitle() + "\" was removed from Bookmarks";
                             if(gridView){
                                 myNews.remove(i);
+                                if(getItemCount() < 1){
+                                    bookmarkFragment.findViewById(R.id.no_bookmarks).setVisibility(View.VISIBLE);
+                                }
                                 notifyItemRemoved(i);
                                 notifyItemRangeChanged(i, myNews.size());
                                 myDialog.dismiss();

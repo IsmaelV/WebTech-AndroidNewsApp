@@ -26,41 +26,32 @@ import java.util.Set;
 
 public class BookmarkFragment extends Fragment {
 
-    private SharedPreferences pref;
     private List<NewsArticle> all_bookmarked;
-    private RVCardAdapter myRVAdapter;
+    private TextView noBookmarks;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_bookmark, container, false);
 
         all_bookmarked = new ArrayList<>();
-        boolean bookmarksExist = populateBookmarks(root);
+        populateBookmarks(root);
+        noBookmarks = root.findViewById(R.id.no_bookmarks);
 
-        if(bookmarksExist){
-            RecyclerView recyclerView = root.findViewById(R.id.bookmark_list);
-            GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
-            myRVAdapter = new RVCardAdapter(all_bookmarked, true);
-            recyclerView.setAdapter(myRVAdapter);
-            recyclerView.setLayoutManager(glm);
-        }
-        else{
-            TextView noBookmarks = root.findViewById(R.id.no_bookmarks);
-            String noneBookmarked = "No Bookmarked Articles";
-            noBookmarks.setText(noneBookmarked);
-        }
+        RecyclerView recyclerView = root.findViewById(R.id.bookmark_list);
+        GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
+        RVCardAdapter myRVAdapter = new RVCardAdapter(all_bookmarked, true, root);
+        recyclerView.setAdapter(myRVAdapter);
+        recyclerView.setLayoutManager(glm);
 
         return root;
     }
 
-    private boolean populateBookmarks(View root){
-        boolean bookmarksExist = false;
-        pref = getContext().getSharedPreferences(root.getResources().getString(R.string.bookmark_pref), 0);
+    private void populateBookmarks(View root){
+        SharedPreferences pref = getContext().getSharedPreferences(root.getResources().getString(R.string.bookmark_pref), 0);
         try {
             if (pref.contains(getResources().getString(R.string.all_bookmarked))) {
                 Set<String> myBookmarks = pref.getStringSet(getResources().getString(R.string.all_bookmarked), null);
                 if (myBookmarks.size() >= 1) {
-                    bookmarksExist = true;
                     for(String key : myBookmarks){
                         NewsArticle tmpArticle = new NewsArticle(Objects.requireNonNull(pref.getString(key, null)));
                         all_bookmarked.add(tmpArticle);
@@ -71,6 +62,5 @@ public class BookmarkFragment extends Fragment {
         catch (NullPointerException npe){
             npe.printStackTrace();
         }
-        return bookmarksExist;
     }
 }
