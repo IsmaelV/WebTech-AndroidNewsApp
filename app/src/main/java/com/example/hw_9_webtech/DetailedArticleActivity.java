@@ -31,7 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -110,7 +111,10 @@ public class DetailedArticleActivity extends AppCompatActivity {
                             detailedImg.setContentDescription(detailedArticle.getTitle());
                             ((TextView) findViewById(R.id.cardDetailedTitleText)).setText(detailedArticle.getTitle());
                             ((TextView) findViewById(R.id.detailedSection)).setText(detailedArticle.getSection());
-                            ((TextView) findViewById(R.id.detailedDate)).setText(detailedArticle.getDate());
+
+                            ZonedDateTime myDate = ZonedDateTime.parse(detailedArticle.getDate()).withZoneSameInstant(ZoneId.of("America/Los_Angeles"));
+                            String myFinalDate = myDate.getDayOfMonth() + " " + myDate.getMonth().toString() + " " + myDate.getYear();
+                            ((TextView) findViewById(R.id.detailedDate)).setText(myFinalDate);
 
                             Spanned content = HtmlCompat.fromHtml(detailedArticle.getContent(), HtmlCompat.FROM_HTML_MODE_LEGACY);
                             ((TextView) findViewById(R.id.detailedContent)).setText(content);
