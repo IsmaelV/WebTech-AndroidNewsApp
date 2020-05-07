@@ -29,8 +29,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,14 +47,13 @@ public class MainActivity extends AppCompatActivity {
     private List<String> autoSuggestionList;
     private RequestQueue myQueue;
     private ArrayAdapter<String> autoCompleteAdapter;
+    private SearchView.SearchAutoComplete searchAutoComplete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestLocationPermission();
-//        autoSuggestionList = new ArrayList<>();
-        myQueue = Volley.newRequestQueue(this);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -68,8 +69,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.top_main_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        myQueue = Volley.newRequestQueue(this);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        final SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
+        searchAutoComplete = (SearchView.SearchAutoComplete) searchView.findViewById(R.id.search_src_text);
         autoSuggestionList = new ArrayList<>();
         autoCompleteAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, autoSuggestionList);
         searchAutoComplete.setAdapter(autoCompleteAdapter);
@@ -97,18 +99,32 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 if(newText.length() <= 2){
                     autoSuggestionList.clear();
+                    autoCompleteAdapter.notifyDataSetChanged();
                     return false;
                 }
                 else{
-                    jsonParse(newText);
+                    autoSuggestionList.clear();
+                    VolleyCallback newVolleyCallback = new VolleyCallback() {
+                        @Override
+                        public void onSuccess(List<String> result) {
+                            autoSuggestionList = result;
+                            System.out.println("After callback: " + autoSuggestionList);
+                            autoCompleteAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, autoSuggestionList);
+                            searchAutoComplete.setAdapter(autoCompleteAdapter);
+                            autoCompleteAdapter.notifyDataSetChanged();
+                            searchAutoComplete.showDropDown();
+                        }
+                    };
+                    jsonParse(newText, newVolleyCallback);
+                    System.out.println("AFTER PARSE" + autoSuggestionList);
                     return true;
                 }
             }
         });
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
-    private void jsonParse(String query) {
+    private void jsonParse(String query, final VolleyCallback callback) {
         String encodedQuery = "";
         try {
             encodedQuery = URLEncoder.encode(query, "utf-8");
@@ -117,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         String apiURL = "https://api.cognitive.microsoft.com/bing/v7.0/suggestions?q=" + encodedQuery;
-        autoSuggestionList.clear();
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 apiURL,
@@ -129,12 +144,12 @@ public class MainActivity extends AppCompatActivity {
                             JSONArray results = response.getJSONArray("suggestionGroups")
                                     .getJSONObject(0)
                                     .getJSONArray("searchSuggestions");
-
+                            List<String> myTmpList = new ArrayList<>();
                             for(int i = 0; i < results.length(); i++){
-
-                                autoSuggestionList.add(results.getJSONObject(i).getString("displayText"));
+                                myTmpList.add(results.getJSONObject(i).getString("displayText"));
+//                                autoSuggestionList.add(results.getJSONObject(i).getString("displayText"));
                             }
-                            autoCompleteAdapter.notifyDataSetChanged();
+                            callback.onSuccess(myTmpList);
                         }
                         catch (JSONException e){
                             e.printStackTrace();
@@ -155,6 +170,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         myQueue.add(request);
+    }
+
+    public interface VolleyCallback{
+        void onSuccess(List<String> result);
     }
 
     @Override
