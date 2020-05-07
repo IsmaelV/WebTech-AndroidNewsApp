@@ -24,4 +24,14 @@
         <item name="colorAccent">@color/colorAccentDetailed</item>
     </style>
 
+    <style name="SearchActivityTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryDetailed</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkDetailed</item>
+        <item name="colorAccent">@color/colorAccentDetailed</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

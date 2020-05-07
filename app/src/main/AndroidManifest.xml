@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SearchActivity"
+            android:label=""
+            android:theme="@style/SearchActivityTheme">
+
+        </activity>
+        <activity
             android:name=".DetailedArticleActivity"
             android:label=""
             android:theme="@style/DetailedTheme">
@@ -29,7 +35,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
