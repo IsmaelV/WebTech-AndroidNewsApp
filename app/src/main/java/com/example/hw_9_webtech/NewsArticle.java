@@ -15,10 +15,10 @@ public class NewsArticle {
 
     public NewsArticle(JSONObject article, String type) {
         if (type.equals("normal")){
-            extractHome(article);
+            extractHome(article, false);
         }
         else if(type.equals("detailed")){
-            System.out.println("Parse for detailed");
+            extractHome(article, true);
         }
     }
 
@@ -43,7 +43,7 @@ public class NewsArticle {
                 "#####" + date;
     }
 
-    private void extractHome(JSONObject article){
+    private void extractHome(JSONObject article, boolean isDetailed){
         try {
             // Set all values
             title = article.getString("webTitle");
@@ -51,10 +51,22 @@ public class NewsArticle {
             webURL = article.getString("webUrl");
             section = article.getString("sectionName");
             date = article.getString("webPublicationDate");
-            content = article.getJSONObject("blocks")
-                    .getJSONArray("body")
-                    .getJSONObject(0)
-                    .getString("bodyTextSummary");
+
+            if(isDetailed){
+                content = "";
+
+                JSONArray body = article.getJSONObject("blocks").getJSONArray("body");
+                for(int k = 0; k < body.length(); k++){
+                    JSONObject bodyResult = body.getJSONObject(k);
+                    content += bodyResult.getString("bodyHtml");
+                }
+            }
+            else{
+                content = article.getJSONObject("blocks")
+                        .getJSONArray("body")
+                        .getJSONObject(0)
+                        .getString("bodyTextSummary");
+            }
 
             // Search for appropriate image
             boolean imgFound = false;

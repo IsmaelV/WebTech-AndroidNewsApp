@@ -10,9 +10,16 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/menu_title"
-        android:titleCondensed="Test"
-        android:title="This is a test"
-        app:showAsAction="ifRoom"/>
+        android:id="@+id/bookmark_detailed"
+        android:icon="@drawable/ic_not_bookmarked"
+        android:onClick="toggle_bookmark"
+        android:title="Bookmark Button"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/twitter_button"
+        android:icon="@drawable/ic_twitter"
+        android:onClick="tweet"
+        android:title="Twitter_Button"
+        app:showAsAction="always"/>
 
 </menu>
