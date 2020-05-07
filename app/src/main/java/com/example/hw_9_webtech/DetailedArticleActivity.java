@@ -92,7 +92,7 @@ public class DetailedArticleActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             results = response.getJSONObject("response").getJSONObject("content");
-                            detailedArticle = new NewsArticle(results, "detailed");
+                            detailedArticle = new NewsArticle(results);
                             myProgressBar.setVisibility(View.GONE);
 
                             Picasso.with(detailedImg.getContext())

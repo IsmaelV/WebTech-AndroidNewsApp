@@ -13,13 +13,8 @@ public class NewsArticle {
     private String webURL;
     private String date;
 
-    public NewsArticle(JSONObject article, String type) {
-        if (type.equals("normal")){
-            extractHome(article, false);
-        }
-        else if(type.equals("detailed")){
-            extractHome(article, true);
-        }
+    public NewsArticle(JSONObject article) {
+        extractInfo(article);
     }
 
     public NewsArticle(String allInfo){
@@ -43,7 +38,7 @@ public class NewsArticle {
                 "#####" + date;
     }
 
-    private void extractHome(JSONObject article, boolean isDetailed){
+    private void extractInfo(JSONObject article){
         try {
             // Set all values
             title = article.getString("webTitle");
@@ -51,21 +46,12 @@ public class NewsArticle {
             webURL = article.getString("webUrl");
             section = article.getString("sectionName");
             date = article.getString("webPublicationDate");
+            content = "";
 
-            if(isDetailed){
-                content = "";
-
-                JSONArray body = article.getJSONObject("blocks").getJSONArray("body");
-                for(int k = 0; k < body.length(); k++){
-                    JSONObject bodyResult = body.getJSONObject(k);
-                    content += bodyResult.getString("bodyHtml");
-                }
-            }
-            else{
-                content = article.getJSONObject("blocks")
-                        .getJSONArray("body")
-                        .getJSONObject(0)
-                        .getString("bodyTextSummary");
+            JSONArray body = article.getJSONObject("blocks").getJSONArray("body");
+            for(int k = 0; k < body.length(); k++){
+                JSONObject bodyResult = body.getJSONObject(k);
+                content += bodyResult.getString("bodyHtml");
             }
 
             // Search for appropriate image
