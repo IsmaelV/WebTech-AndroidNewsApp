@@ -47,6 +47,7 @@ public class DetailedArticleActivity extends AppCompatActivity {
     private ImageView detailedImg;
     private ScrollView myCard;
     private MenuItem bookmark;
+    private MenuItem appbarTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,8 @@ public class DetailedArticleActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.top_detailed_article_menu, menu);
-        bookmark = menu.getItem(1);
+        bookmark = menu.getItem(2);
+        appbarTitle = menu.getItem(1);
         return true;
     }
 
@@ -132,6 +134,13 @@ public class DetailedArticleActivity extends AppCompatActivity {
 
                             if(pref.contains(detailedArticle.getArticleID())){
                                 bookmark.setIcon(R.drawable.ic_bookmarked);
+                            }
+
+                            if (detailedArticle.getTitle().length() > 27){
+                                appbarTitle.setTitle(detailedArticle.getTitle().subSequence(0, 27).toString().concat("..."));
+                            }
+                            else {
+                                appbarTitle.setTitle(detailedArticle.getTitle());
                             }
 
                             myCard.setVisibility(View.VISIBLE);
