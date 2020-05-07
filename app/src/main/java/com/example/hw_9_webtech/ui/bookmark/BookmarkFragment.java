@@ -27,7 +27,6 @@ import java.util.Set;
 public class BookmarkFragment extends Fragment {
 
     private List<NewsArticle> all_bookmarked;
-    private TextView noBookmarks;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +34,7 @@ public class BookmarkFragment extends Fragment {
 
         all_bookmarked = new ArrayList<>();
         populateBookmarks(root);
-        noBookmarks = root.findViewById(R.id.no_bookmarks);
+        TextView noBookmarks = root.findViewById(R.id.no_bookmarks);
 
         RecyclerView recyclerView = root.findViewById(R.id.bookmark_list);
         GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
