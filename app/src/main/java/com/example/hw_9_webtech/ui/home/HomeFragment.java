@@ -78,52 +78,6 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-//        weatherCard = root.findViewById(R.id.weather_card_wrapper);
-//        weatherCard.setVisibility(View.GONE);
-//        ((TextView) root.findViewById(R.id.weatherCity)).setText(cityName);
-//        ((TextView) root.findViewById(R.id.weatherState)).setText(stateName);
-//        ((TextView) root.findViewById(R.id.weatherSummary)).setText(weatherSummary);
-//        String myTemperature = weatherTemperature + "\u2109C";
-//        ((TextView) root.findViewById(R.id.weatherTemp)).setText(myTemperature);
-//        switch (weatherSummary){
-//            case "Clouds":
-//                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-//                        .load("https://csci571.com/hw/hw9/images/android/cloudy_weather.jpg")
-//                        .fit()
-//                        .into((ImageView) root.findViewById(R.id.weatherBackground));
-//                break;
-//            case "Clear":
-//                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-//                        .load("https://csci571.com/hw/hw9/images/android/clear_weather.jpg")
-//                        .fit()
-//                        .into((ImageView) root.findViewById(R.id.weatherBackground));
-//                break;
-//            case "Snow":
-//                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-//                        .load("https://csci571.com/hw/hw9/images/android/snowy_weather.jpg")
-//                        .fit()
-//                        .into((ImageView) root.findViewById(R.id.weatherBackground));
-//                break;
-//            case "Rain":
-//            case "Drizzle":
-//                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-//                        .load("https://csci571.com/hw/hw9/images/android/rainy_weather.jpg")
-//                        .fit()
-//                        .into((ImageView) root.findViewById(R.id.weatherBackground));
-//                break;
-//            case "Thunderstorm":
-//                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-//                        .load("https://csci571.com/hw/hw9/images/android/thunder_weather.jpg")
-//                        .fit()
-//                        .into((ImageView) root.findViewById(R.id.weatherBackground));
-//                break;
-//            default:
-//                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-//                        .load("https://csci571.com/hw/hw9/images/android/sunny_weather.jpg")
-//                        .fit()
-//                        .into((ImageView) root.findViewById(R.id.weatherBackground));
-//        }
-
         myProgressBar = root.findViewById(R.id.progress_container);
 
         all_news = new ArrayList<>();
@@ -143,6 +97,7 @@ public class HomeFragment extends Fragment {
             public void onRefresh() {
                 myProgressBar.setVisibility(View.VISIBLE);
                 weatherCard.setVisibility(View.GONE);
+                setWeatherFeatures();
                 jsonParse();
                 r.setRefreshing(false);
             }
@@ -202,8 +157,8 @@ public class HomeFragment extends Fragment {
             return;
         }
         Location lastLocation = locationManager.getLastKnownLocation(provider);
-        Double lat;
-        Double lng;
+        double lat;
+        double lng;
         try {
             lat = lastLocation.getLatitude();
             lng = lastLocation.getLongitude();
@@ -238,49 +193,7 @@ public class HomeFragment extends Fragment {
                             weatherSummary = response.getJSONArray("weather").getJSONObject(0).getString("main");
                             weatherTemperature = response.getJSONObject("main").getInt("temp");
 
-                            ((TextView) root.findViewById(R.id.weatherCity)).setText(cityName);
-                            ((TextView) root.findViewById(R.id.weatherState)).setText(stateName);
-                            ((TextView) root.findViewById(R.id.weatherSummary)).setText(weatherSummary);
-                            String myTemperature = weatherTemperature + "\u2103";
-                            ((TextView) root.findViewById(R.id.weatherTemp)).setText(myTemperature);
-                            switch (weatherSummary){
-                                case "Clouds":
-                                    Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-                                            .load("https://csci571.com/hw/hw9/images/android/cloudy_weather.jpg")
-                                            .fit()
-                                            .into((ImageView) root.findViewById(R.id.weatherBackground));
-                                    break;
-                                case "Clear":
-                                    Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-                                            .load("https://csci571.com/hw/hw9/images/android/clear_weather.jpg")
-                                            .fit()
-                                            .into((ImageView) root.findViewById(R.id.weatherBackground));
-                                    break;
-                                case "Snow":
-                                    Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-                                            .load("https://csci571.com/hw/hw9/images/android/snowy_weather.jpg")
-                                            .fit()
-                                            .into((ImageView) root.findViewById(R.id.weatherBackground));
-                                    break;
-                                case "Rain":
-                                case "Drizzle":
-                                    Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-                                            .load("https://csci571.com/hw/hw9/images/android/rainy_weather.jpg")
-                                            .fit()
-                                            .into((ImageView) root.findViewById(R.id.weatherBackground));
-                                    break;
-                                case "Thunderstorm":
-                                    Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-                                            .load("https://csci571.com/hw/hw9/images/android/thunder_weather.jpg")
-                                            .fit()
-                                            .into((ImageView) root.findViewById(R.id.weatherBackground));
-                                    break;
-                                default:
-                                    Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
-                                            .load("https://csci571.com/hw/hw9/images/android/sunny_weather.jpg")
-                                            .fit()
-                                            .into((ImageView) root.findViewById(R.id.weatherBackground));
-                            }
+                            setWeatherFeatures();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -293,6 +206,52 @@ public class HomeFragment extends Fragment {
                     }
                 });
         mqueue.add(request);
+    }
+
+    private void setWeatherFeatures(){
+        ((TextView) root.findViewById(R.id.weatherCity)).setText(cityName);
+        ((TextView) root.findViewById(R.id.weatherState)).setText(stateName);
+        ((TextView) root.findViewById(R.id.weatherSummary)).setText(weatherSummary);
+        String myTemperature = weatherTemperature + "\u2103";
+        ((TextView) root.findViewById(R.id.weatherTemp)).setText(myTemperature);
+        switch (weatherSummary){
+            case "Clouds":
+                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
+                        .load("https://csci571.com/hw/hw9/images/android/cloudy_weather.jpg")
+                        .fit()
+                        .into((ImageView) root.findViewById(R.id.weatherBackground));
+                break;
+            case "Clear":
+                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
+                        .load("https://csci571.com/hw/hw9/images/android/clear_weather.jpg")
+                        .fit()
+                        .into((ImageView) root.findViewById(R.id.weatherBackground));
+                break;
+            case "Snow":
+                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
+                        .load("https://csci571.com/hw/hw9/images/android/snowy_weather.jpg")
+                        .fit()
+                        .into((ImageView) root.findViewById(R.id.weatherBackground));
+                break;
+            case "Rain":
+            case "Drizzle":
+                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
+                        .load("https://csci571.com/hw/hw9/images/android/rainy_weather.jpg")
+                        .fit()
+                        .into((ImageView) root.findViewById(R.id.weatherBackground));
+                break;
+            case "Thunderstorm":
+                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
+                        .load("https://csci571.com/hw/hw9/images/android/thunder_weather.jpg")
+                        .fit()
+                        .into((ImageView) root.findViewById(R.id.weatherBackground));
+                break;
+            default:
+                Picasso.with(root.findViewById(R.id.weatherBackground).getContext())
+                        .load("https://csci571.com/hw/hw9/images/android/sunny_weather.jpg")
+                        .fit()
+                        .into((ImageView) root.findViewById(R.id.weatherBackground));
+        }
     }
 
 }
