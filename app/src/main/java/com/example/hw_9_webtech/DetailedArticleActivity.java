@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -31,6 +32,8 @@ import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DetailedArticleActivity extends AppCompatActivity {
 
@@ -38,15 +41,19 @@ public class DetailedArticleActivity extends AppCompatActivity {
     private NewsArticle detailedArticle;
     private JSONObject results;
     private RequestQueue myQueue;
+    private SharedPreferences pref;
 
     private ImageView detailedImg;
     private ScrollView myCard;
+    private MenuItem bookmark;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_article);
         invalidateOptionsMenu();  // Works alongside onCreateOptionsMenu to make custom menu
+
+        pref = getSharedPreferences(getResources().getString(R.string.bookmark_pref), 0);
 
         myCard = findViewById(R.id.card_wrapper);
         myCard.setVisibility(View.GONE);
@@ -63,6 +70,7 @@ public class DetailedArticleActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.top_detailed_article_menu, menu);
+        bookmark = menu.getItem(1);
         return true;
     }
 
@@ -118,6 +126,10 @@ public class DetailedArticleActivity extends AppCompatActivity {
                                 }
                             });
 
+                            if(pref.contains(detailedArticle.getArticleID())){
+                                bookmark.setIcon(R.drawable.ic_bookmarked);
+                            }
+
                             myCard.setVisibility(View.VISIBLE);
                         }
                         catch (JSONException e){
@@ -135,7 +147,27 @@ public class DetailedArticleActivity extends AppCompatActivity {
     }
 
     public void toggle_bookmark(MenuItem item) {
-        Toast toast = Toast.makeText(this, "Will toggle bookmark", Toast.LENGTH_SHORT);
+        SharedPreferences.Editor editor = pref.edit();
+        Toast toast;
+        String toToast;
+        if(pref.contains(detailedArticle.getArticleID())){
+            editor.remove(detailedArticle.getArticleID());
+            Set<String> allArticles = pref.getStringSet(getResources().getString(R.string.all_bookmarked), new HashSet<String>());
+            allArticles.remove(detailedArticle.getArticleID());
+            editor.putStringSet(getResources().getString(R.string.all_bookmarked), allArticles);
+            item.setIcon(R.drawable.ic_not_bookmarked);
+            toToast = "\"" + detailedArticle.getTitle() + "\" was removed from Bookmarks";
+        }
+        else{
+            editor.putString(detailedArticle.getArticleID(), detailedArticle.toString());
+            Set<String> allArticles = pref.getStringSet(getResources().getString(R.string.all_bookmarked), new HashSet<String>());
+            allArticles.add(detailedArticle.getArticleID());
+            editor.putStringSet(getResources().getString(R.string.all_bookmarked), allArticles);
+            item.setIcon(R.drawable.ic_bookmarked);
+            toToast = "\"" + detailedArticle.getTitle() + "\" was added to Bookmarks";
+        }
+        editor.apply();
+        toast = Toast.makeText(this, toToast, Toast.LENGTH_SHORT);
         toast.show();
     }
 
