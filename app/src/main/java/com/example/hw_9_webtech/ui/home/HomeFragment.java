@@ -72,6 +72,11 @@ public class HomeFragment extends Fragment {
 
         mqueue = Volley.newRequestQueue(Objects.requireNonNull(getActivity()));
 
+        cityName = "";
+        stateName = "";
+        weatherSummary = "";
+        weatherTemperature = 0;
+
         try {
             populateLocationCard();
         } catch (IOException e) {
